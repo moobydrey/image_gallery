@@ -8,9 +8,17 @@ import 'package:gallery_view/view_photo.dart';
 
 class GalleryView extends StatelessWidget {
   final List<String> imageUrlList;
+  final Color bgColor;
+  final Color borderColor;
+  final double width;
   final int crossAxisCount;
   const GalleryView(
-      {required Key key, required this.imageUrlList, this.crossAxisCount = 3});
+      {required Key key,
+        required this.imageUrlList,
+        this.bgColor = Colors.white,
+        this.width = 1,
+        this.borderColor = Colors.blue,
+        this.crossAxisCount = 3});
 
   static const MethodChannel _channel = const MethodChannel('gallery_view');
 
@@ -23,7 +31,7 @@ class GalleryView extends StatelessWidget {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
-      backgroundColor: Colors.grey.shade300,
+      backgroundColor: bgColor,
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: GridView.builder(
@@ -48,6 +56,8 @@ class GalleryView extends StatelessWidget {
                           fullscreenDialog: true));
                 },
                 child: Container(
+                  decoration: BoxDecoration(
+                      border: Border.all(color: borderColor, width: width)),
                   child: Hero(
                       tag: "photo$index",
                       child: CachedNetworkImage(

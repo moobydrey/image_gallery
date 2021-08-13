@@ -6,7 +6,7 @@ import 'package:photo_view/photo_view_gallery.dart';
 class ViewPhotos extends StatefulWidget {
   final String heroTitle;
   final imageIndex;
-  final List<dynamic> imageList;
+  final List<dynamic>? imageList;
   ViewPhotos({this.imageIndex, this.imageList, this.heroTitle = "img"});
 
   @override
@@ -14,8 +14,8 @@ class ViewPhotos extends StatefulWidget {
 }
 
 class _ViewPhotosState extends State<ViewPhotos> {
-  PageController pageController;
-  int currentIndex;
+  PageController? pageController;
+  int? currentIndex;
   @override
   void initState() {
     // TODO: implement initState
@@ -36,7 +36,7 @@ class _ViewPhotosState extends State<ViewPhotos> {
       backgroundColor: Colors.black,
       appBar: AppBar(
         title: Text(
-          "${currentIndex + 1} out of ${widget.imageList.length}",
+          "${currentIndex ?? 0 + 1} out of ${widget.imageList?.length}",
           style: TextStyle(color: Colors.white),
         ),
         actions: [
@@ -62,21 +62,25 @@ class _ViewPhotosState extends State<ViewPhotos> {
             pageController: pageController,
             builder: (BuildContext context, int index) {
               return PhotoViewGalleryPageOptions(
-                imageProvider: NetworkImage(widget.imageList[index]),
+                imageProvider: NetworkImage(widget.imageList?[index]),
                 heroAttributes:
                     PhotoViewHeroAttributes(tag: "photo${widget.imageIndex}"),
               );
             },
             onPageChanged: onPageChanged,
-            itemCount: widget.imageList.length,
+            itemCount: widget.imageList?.length,
             loadingBuilder: (context, progress) => Center(
               child: Container(
                 width: 60.0,
                 height: 60.0,
-                child: (progress == null || progress.cumulativeBytesLoaded == null || progress.expectedTotalBytes == null)?CircularProgressIndicator():CircularProgressIndicator(
-                  value: progress.cumulativeBytesLoaded /
-                      progress.expectedTotalBytes,
-                ),
+                child: (progress == null ||
+                        progress.cumulativeBytesLoaded == null ||
+                        progress.expectedTotalBytes == null)
+                    ? CircularProgressIndicator()
+                    : CircularProgressIndicator(
+                        value: progress.cumulativeBytesLoaded /
+                            progress.expectedTotalBytes!,
+                      ),
               ),
             ),
           ),
